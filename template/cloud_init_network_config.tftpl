@@ -1,0 +1,23 @@
+#cloud-config
+version: 2
+ethernets:
+%{ for interface in config.interfaces ~}
+  ${interface.name}:
+    dhcp4: ${interface.dhcp}
+%{ if interface.addresses != null ~}
+    addresses:
+%{ for address in interface.addresses ~}
+      - ${address}
+%{ endfor ~}
+%{ endif ~}
+%{ if interface.gateway != null ~}
+    gateway: ${interface.gateway}
+%{ endif ~}
+%{ if interface.nameservers != null ~}
+    nameservers:
+      addresses:
+%{ for nameserver in interface.nameservers ~}
+        - ${nameserver}
+%{ endfor ~}
+%{ endif ~}
+%{ endfor ~}

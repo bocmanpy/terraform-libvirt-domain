@@ -1,0 +1,27 @@
+#cloud-config
+
+users:
+  - default
+  - name: "${config.username}"
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    lock_passwd: false
+    passwd: "${config.password}"
+    ssh_authorized_keys: ["${config.ssh_key}"]
+
+packages:
+%{ for pkg in config.packages ~}
+  - ${pkg}
+%{ endfor ~}
+
+disable_root: true
+ssh_pwauth: false
+
+growpart:
+    devices: [/]
+    mode: auto
+    ignore_growroot_disabled: false
+
+resize_rootfs: true
+
+timezone: ${config.timezone}
