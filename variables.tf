@@ -27,7 +27,7 @@ variable "vm" {
     cloud_init = optional(list(object({
       hostname = optional(string, null)
       username = string
-      password = string
+      password = optional(string, null)
       ssh_key  = optional(string, null)
       packages = optional(list(string), null)
       timezone = optional(string, "UTC")
