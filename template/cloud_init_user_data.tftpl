@@ -5,13 +5,19 @@ users:
   - name: "${config.username}"
     shell: /bin/bash
     sudo: "ALL=(ALL) NOPASSWD:ALL"
-    lock_passwd: false
+%{ if config.password != null ~}
     passwd: "${config.password}"
+    lock_passwd: false
+%{ else ~}
+    lock_passwd: true
+%{ endif ~}
+%{ if config.ssh_key != null ~}
     ssh_authorized_keys: ["${config.ssh_key}"]
+%{ endif ~}
 
 packages:
 %{ for pkg in config.packages ~}
-  - ${pkg}
+  - "${pkg}"
 %{ endfor ~}
 
 disable_root: true
@@ -24,4 +30,4 @@ growpart:
 
 resize_rootfs: true
 
-timezone: ${config.timezone}
+timezone: "${config.timezone}"
